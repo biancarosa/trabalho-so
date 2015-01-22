@@ -4,11 +4,11 @@
 
 typedef double **mat;
 
-void mat_show( mat matrix, int size ){
+void mat_show(mat matrix, int size) {
     int i, j;
     printf("\n\n");
-    for(i=0;i<size;i++){
-        for(j=0;j<size;j++){
+    for (i = 0; i < size; i++) {
+        for (j = 0; j < size; j++) {
             printf(" %f", matrix[i][j]);
         }
         printf("\n");
@@ -16,21 +16,21 @@ void mat_show( mat matrix, int size ){
     printf("\n");
 }
 
-void wolfranFormat( mat matrix, int size ){
+void wolfranFormat(mat matrix, int size) {
     int i, j;
     printf("{");
-    for( i=0;i<size;i++ ){
+    for (i = 0; i < size; i++) {
         printf("{");
-        for( j=0; j<size;j++){
-            printf("%d",(int)matrix[i][j]);
-            if( j<size-1 ){
-                printf( "," );
+        for (j = 0; j < size; j++) {
+            printf("%d", (int) matrix[i][j]);
+            if (j < size - 1) {
+                printf(",");
             }
-        
+
         }
         printf("}");
-        if( i<size-1 ){
-            printf( "," );
+        if (i < size - 1) {
+            printf(",");
         }
     }
     printf("}");
@@ -58,7 +58,7 @@ void randomFill(mat matrix, int size) {
     int i, j;
     for (i = 0; i < size; i++) {
         for (j = 0; j < size; j++) {
-            matrix[i][j] = rand()%10;
+            matrix[i][j] = (double)(rand() % 10);
         }
     }
 }
@@ -126,7 +126,7 @@ void mat_LU(mat matrix, mat matL, mat matU, mat matP, int size) {
     for (i = 0; i < size; i++) {
         matL[i][i] = 1;
     }
-    
+
 }
 
 double triangularMatrixDeterminant(mat matrix, int size) {
@@ -139,67 +139,47 @@ double triangularMatrixDeterminant(mat matrix, int size) {
 
 double determinant(mat matrix, int size) {
     double det;
-    mat matL = newMatrix(size), matU = newMatrix(size),matP = newMatrix(size);
+    int i, pivotCount = 0;
+    mat matL = newMatrix(size), matU = newMatrix(size), matP = newMatrix(size);
     mat_LU(matrix, matL, matU, matP, size);
     det = triangularMatrixDeterminant(matU, size);
-    
+
+    for (i = 0; i < size; i++) {
+        if( matP[i][i] == 0 ) {
+            pivotCount++;
+        }
+    }
+    if( pivotCount%2 == 0 && pivotCount != 0 ){
+        det *= -1;
+    }
+
     mat debug = newMatrix(size);
     multplyMatrices(matL, matU, debug, size);
-    
-    printf( "\n\nL" );
-    mat_show(matL,size);
-    printf( "u" );
-    mat_show(matU,size);
-    printf( "LU" );
-    mat_show(debug,size);
+
+    printf("\n\nL");
+    mat_show(matL, size);
+    printf("u");
+    mat_show(matU, size);
+    printf("LU");
+    mat_show(debug, size);
+    printf("pivot");
+    mat_show(matP, size);
     wolfranFormat(debug, size);
-    
-    
+
+
     free(matL);
     free(matU);
     free(matP);
     return det;
 }
 
-void mat_show( mat matrix, int size ){
-    int i, j;
-    printf("\n\n");
-    for(i=0;i<size;i++){
-        for(j=0;j<size;j++){
-            printf(" %f", matrix[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
-void wolfranFormat( mat matrix, int size ){
-    int i, j;
-    printf("{");
-    for( i=0;i<size;i++ ){
-        printf("{");
-        for( j=0; j<size;j++){
-            printf("%d",(int)matrix[i][j]);
-            if( j<size-1 ){
-                printf( "," );
-            }
-        
-        }
-        printf("}");
-        if( i<size-1 ){
-            printf( "," );
-        }
-    }
-    printf("}");
-}
-
 int main() {
     int size = 4;
-    srand( time(NULL) );
+    srand(time(NULL));
     mat matrix = newMatrix(size);
     randomFill(matrix, size);
-    printf( "original" );
+    printf("original");
     mat_show(matrix, size);
     wolfranFormat(matrix, size);
-    printf("Determinant: %f", determinant(matrix, size) );
+    printf("Determinant: %f", determinant(matrix, size));
 }
