@@ -4,6 +4,38 @@
 
 typedef double **mat;
 
+void mat_show( mat matrix, int size ){
+    int i, j;
+    printf("\n\n");
+    for(i=0;i<size;i++){
+        for(j=0;j<size;j++){
+            printf(" %f", matrix[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+void wolfranFormat( mat matrix, int size ){
+    int i, j;
+    printf("{");
+    for( i=0;i<size;i++ ){
+        printf("{");
+        for( j=0; j<size;j++){
+            printf("%d",(int)matrix[i][j]);
+            if( j<size-1 ){
+                printf( "," );
+            }
+        
+        }
+        printf("}");
+        if( i<size-1 ){
+            printf( "," );
+        }
+    }
+    printf("}");
+}
+
 mat newMatrix(int size) {
     int i;
     mat matrix = malloc(size * sizeof ( double *));
@@ -114,11 +146,11 @@ double determinant(mat matrix, int size) {
     mat debug = newMatrix(size);
     multplyMatrices(matL, matU, debug, size);
     
-    //printf( "\n\nL" );
+    printf( "\n\nL" );
     mat_show(matL,size);
-   // printf( "u" );
+    printf( "u" );
     mat_show(matU,size);
-  //  printf( "LU" );
+    printf( "LU" );
     mat_show(debug,size);
     wolfranFormat(debug, size);
     
@@ -129,38 +161,6 @@ double determinant(mat matrix, int size) {
     return det;
 }
 
-void mat_show( mat matrix, int size ){
-    int i, j;
-    printf("\n\n");
-    for(i=0;i<size;i++){
-        for(j=0;j<size;j++){
-            printf(" %f", matrix[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
-void wolfranFormat( mat matrix, int size ){
-    int i, j;
-    printf("{");
-    for( i=0;i<size;i++ ){
-        printf("{");
-        for( j=0; j<size;j++){
-            printf("%d",(int)matrix[i][j]);
-            if( j<size-1 ){
-                printf( "," );
-            }
-        
-        }
-        printf("}");
-        if( i<size-1 ){
-            printf( "," );
-        }
-    }
-    printf("}");
-}
-
 int main() {
     int size = 4;
     srand( time(NULL) );
@@ -169,5 +169,5 @@ int main() {
     printf( "original" );
     mat_show(matrix, size);
     wolfranFormat(matrix, size);
-    printf("%f", determinant(matrix, size) );
+    printf("\n Determinante: %f", determinant(matrix, size) );
 }
