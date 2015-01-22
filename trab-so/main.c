@@ -4,6 +4,38 @@
 
 typedef double **mat;
 
+void mat_show( mat matrix, int size ){
+    int i, j;
+    printf("\n\n");
+    for(i=0;i<size;i++){
+        for(j=0;j<size;j++){
+            printf(" %f", matrix[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+void wolfranFormat( mat matrix, int size ){
+    int i, j;
+    printf("{");
+    for( i=0;i<size;i++ ){
+        printf("{");
+        for( j=0; j<size;j++){
+            printf("%d",(int)matrix[i][j]);
+            if( j<size-1 ){
+                printf( "," );
+            }
+        
+        }
+        printf("}");
+        if( i<size-1 ){
+            printf( "," );
+        }
+    }
+    printf("}");
+}
+
 mat newMatrix(int size) {
     int i;
     mat matrix = malloc(size * sizeof ( double *));
