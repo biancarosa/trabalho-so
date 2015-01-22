@@ -114,11 +114,11 @@ double determinant(mat matrix, int size) {
     mat debug = newMatrix(size);
     multplyMatrices(matL, matU, debug, size);
     
-    //printf( "\n\nL" );
+    printf( "\n\nL" );
     mat_show(matL,size);
-   // printf( "u" );
+    printf( "u" );
     mat_show(matU,size);
-  //  printf( "LU" );
+    printf( "LU" );
     mat_show(debug,size);
     wolfranFormat(debug, size);
     
@@ -169,5 +169,5 @@ int main() {
     printf( "original" );
     mat_show(matrix, size);
     wolfranFormat(matrix, size);
-    printf("%f", determinant(matrix, size) );
+    printf("Determinant: %f", determinant(matrix, size) );
 }
