@@ -418,11 +418,6 @@ void determinanteMatriz(){
 /*EA - Thread Escritora de Arquivo - Escreve um arquivo nome.out (nome = nome de entrada). O arquivo contém o nome do arquivo de entrada, a ordem das matrizes e os valores de A, B, C e E. Depois de imprimir, faz free na estrutura S.  Teremos 3 instâncias desta thread.*/
 
 void escreverArquivo(){
-    FILE * f = fopen(OUT_FILE, "w");
-    if (f == NULL) {
-        printf("Error opening file!\n");
-        exit(1);
-    }
     while(1){
         printf("\n\nEsperando full 3\n\n");
         sem_wait(&shared[3].full);
@@ -430,12 +425,19 @@ void escreverArquivo(){
         sem_wait(&shared[3].mutex);
         printf("\n\nEsperando mais nada 3\n\n");
 
-         S *temp =  shared[3].buffer[shared[3].bufferOut];
+        S *temp =  shared[3].buffer[shared[3].bufferOut];
         shared[3].bufferOut = ( shared[3].bufferOut +1 )%5;
 
 
         printf("\n\n Arquivo %s\n",temp->Nome);
         printf("\n\n Ordem %d\n",temp->Ordem);
+
+
+        FILE * f = fopen(OUT_FILE, "a");
+        if (f == NULL) {
+            printf("Error opening file!\n");
+            exit(1);
+        }
 
 
         fprintf(f,"================================\n");
@@ -450,18 +452,20 @@ void escreverArquivo(){
         fprintf(f, "%f\n",temp->E);
         fprintf(f,"================================\n");
 
+        fclose(f);
+
         contEscrita++;
 
         printf("Escrita %d  Leitura %d\n", contEscrita, contLeitura);
 
-        if (contEscrita == contLeitura) break;
+        if (contEscrita == contLeitura) {
+            printf("acabou \n");
+        };
 
         sem_post(&shared[3].empty);
         sem_post(&shared[3].mutex);
 
     }
-
-    fclose(f);
 
 }
 
@@ -516,10 +520,11 @@ int main() {
             tDeterminanteMatriz[index]=index;
             pthread_create(&idDeterminanteMatriz, NULL, determinanteMatriz, &tDeterminanteMatriz[index]);
         }
-        if ( index < 1){//nEscreverArquivo ){
+        if ( index < nEscreverArquivo ){
             tEscreverArquivo[index]=index;
             pthread_create(&idEscreverArquivo, NULL, escreverArquivo, &tEscreverArquivo[index]);
         }
+
         //if (index<numThreads){
         //    threadArray[index]=index;
         //    pthread_create(&idthread, NULL, threadFunc, &threadArray[index]);
@@ -532,4 +537,3 @@ int main() {
     pthread_exit(NULL);
     
 }
-
