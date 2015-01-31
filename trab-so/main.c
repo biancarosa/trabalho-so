@@ -532,8 +532,26 @@ int main() {
         index++;
     }
 
-    
+   // printf("abc");
 
-    pthread_exit(NULL);
+    while(1) {
+        if (contEscrita == contLeitura) {
+           // int retvalue = pthread_cancel(idLerCatalogo);
+           // printf("Retorno / thread_cancel :: %d \n",retvalue);
+            int retvalue = pthread_cancel(idEscreverArquivo);
+            printf("Retorno / thread_cancel :: %d \n",retvalue);
+            retvalue = pthread_cancel(idLerArquivos);
+            printf("Retorno / thread_cancel :: %d \n",retvalue);
+            retvalue = pthread_cancel(idDeterminanteMatriz);
+            printf("Retorno / thread_cancel :: %d \n",retvalue);
+            retvalue = pthread_cancel(idMultiplicarMatrizes);
+            printf("Retorno / thread_cancel :: %d \n",retvalue);
+
+            return 0;
+        };
+    }
+
+    return 1;
     
 }
+
